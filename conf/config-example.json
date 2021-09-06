@@ -1,0 +1,12 @@
+{
+  "Port": 8000,
+  "JwtSecret": "fasfjio",
+  "RunMode": "debug",
+  "Mysql": {
+    "Username": "root",
+    "Password": "123456",
+    "DbName": "Hinux",
+    "Port": 3306,
+    "Host": "127.0.0.1"
+  }
+}
