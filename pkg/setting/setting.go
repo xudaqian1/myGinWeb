@@ -10,10 +10,11 @@ import (
 type IConfig struct {
 	JwtSecret string
 	RunMode   string
-	MySQL     MySqlConfig
+	Database     DatabaseConfig
 	Port      int
 }
-type MySqlConfig struct {
+type DatabaseConfig struct {
+	Type string
 	Username string
 	Password string
 	DbName   string
@@ -51,18 +52,21 @@ func init() {
 		Config.JwtSecret = key
 	}
 	//mysql
-	if key = os.Getenv("MYSQL_PORT"); key != "" {
+	if key = os.Getenv("DATABASE_DB_NAME"); key != "" {
+		Config.Database.Type = key
+	}
+	if key = os.Getenv("DATABASE_PORT"); key != "" {
 		if b, err := strconv.Atoi(key); err == nil {
-			Config.MySQL.Port = b
+			Config.Database.Port = b
 		}
 	}
-	if key = os.Getenv("MYSQL_HOST"); key != "" {
-		Config.MySQL.Host = key
+	if key = os.Getenv("DATABASE_HOST"); key != "" {
+		Config.Database.Host = key
 	}
-	if key = os.Getenv("MYSQL_PASSWORD"); key != "" {
-		Config.MySQL.Password = key
+	if key = os.Getenv("DATABASE_PASSWORD"); key != "" {
+		Config.Database.Password = key
 	}
-	if key = os.Getenv("MYSQL_DB_NAME"); key != "" {
-		Config.MySQL.DbName = key
+	if key = os.Getenv("DATABASE_DB_NAME"); key != "" {
+		Config.Database.DbName = key
 	}
 }

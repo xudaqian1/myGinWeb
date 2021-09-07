@@ -2,7 +2,8 @@
   "Port": 8000,
   "JwtSecret": "fasfjio",
   "RunMode": "debug",
-  "Mysql": {
+  "Database": {
+    "Type": "mysql",
     "Username": "root",
     "Password": "123456",
     "DbName": "Hinux",
