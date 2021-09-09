@@ -12,8 +12,8 @@ var db *gorm.DB
 
 type Model struct {
 	ID        int           `gorm:"primaryKey" json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"update_at"`
+	CreatedAt int `json:"created_at"`
+	UpdatedAt int `json:"updated_at"`
 }
 
 func InitDb(DbConfig setting.DatabaseConfig)(err error){
@@ -25,6 +25,8 @@ func InitDb(DbConfig setting.DatabaseConfig)(err error){
 		return
 	}
 	db.AutoMigrate(&User{})
+	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 	db.DB().SetConnMaxLifetime(time.Hour)
@@ -33,4 +35,28 @@ func InitDb(DbConfig setting.DatabaseConfig)(err error){
 
 func CloseDB() {
 	defer db.Close()
+}
+
+func updateTimeStampForCreateCallback(scope *gorm.Scope) {
+	if !scope.HasError() {
+		nowTime := time.Now().Unix()
+		if createTimeField, ok := scope.FieldByName("CreatedAt"); ok {
+			if createTimeField.IsBlank {
+				createTimeField.Set(nowTime)
+			}
+		}
+
+		if modifyTimeField, ok := scope.FieldByName("UpdatedAt"); ok {
+			if modifyTimeField.IsBlank {
+				modifyTimeField.Set(nowTime)
+			}
+		}
+	}
+}
+
+// updateTimeStampForUpdateCallback will set `ModifiedOn` when updating
+func updateTimeStampForUpdateCallback(scope *gorm.Scope) {
+	if _, ok := scope.Get("gorm:created_at"); !ok {
+		scope.SetColumn("UpdateAt", time.Now().Unix())
+	}
 }
