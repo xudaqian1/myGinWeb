@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"myGinWeb/pkg/utils"
 	"myGinWeb/service/user_service"
 )
 
@@ -27,12 +28,14 @@ func (u User) Create(c *gin.Context) {
 		return
 	}
 
+	salt := utils.GetRandomString(16)
+	md5Password := utils.MD5(req.Password + salt)
 	userService := user_service.User{
 		Username: req.Username,
-		Password: req.Password,
+		Password: md5Password,
 		Role: req.Role,
 		Email: req.Email,
-		Salt: "123456",
+		Salt: salt,
 	}
 	if err:=userService.Add();err !=nil{
 		c.JSON(400, gin.H{
