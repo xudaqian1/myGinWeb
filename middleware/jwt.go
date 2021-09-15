@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"myGinWeb/pkg/e"
 	"myGinWeb/pkg/utils"
@@ -14,7 +13,6 @@ func JWT() gin.HandlerFunc {
 		var code int
 		code = e.SUCCESS
 		token := c.Request.Header.Get("Authorization")
-		fmt.Println(token)
 		if token == "" {
 			code = e.INVALID_PARAMS
 		} else {
@@ -25,9 +23,7 @@ func JWT() gin.HandlerFunc {
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
 			}
-			fmt.Println(code)
 		}
-
 		if code != e.SUCCESS {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": code,
