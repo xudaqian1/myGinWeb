@@ -1,0 +1,54 @@
+definitions:
+  gin.H:
+    additionalProperties: true
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: 通过接口进行注册
+      parameters:
+      - description: 用户名
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: 权限
+        enum:
+        - '"user"'
+        - '"admin"'
+        in: body
+        name: role
+        required: true
+        schema:
+          type: string
+      - description: 邮箱
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: 密码
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: '{"msg": "create failure"}'
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: 注册
+      tags:
+      - 用户
+swagger: "2.0"

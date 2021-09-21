@@ -2,7 +2,10 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"myGinWeb/controller"
+	_ "myGinWeb/docs"
 	"myGinWeb/middleware"
 	"myGinWeb/pkg/setting"
 )
@@ -10,8 +13,9 @@ import (
 var user = controller.NewUser()
 
 func SetupRouter() *gin.Engine {
-	gin.SetMode(setting.Config.RunMode)
 	r := gin.Default()
+	gin.SetMode(setting.Config.RunMode)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/ping", controller.Ping)
 	r.POST("/users/login", user.Login)
 	r.POST("/users/register", user.Create)

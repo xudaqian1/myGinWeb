@@ -19,6 +19,17 @@ type RegisterRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+// Create @Summary 注册
+// @Description 通过接口进行注册
+// @Tags 用户
+// @Accept json
+// @Param username body string true "用户名"
+// @Param role body string true "权限" Enums("user", "admin")
+// @Param email body string true "邮箱"
+// @Param password body string true "密码"
+// @Success 200 {object} gin.H "{"code":200,"data":{},"msg":"ok"}"
+// @Failure 400 {object} gin.H "{"msg": "create failure"}"
+// @Router /users/login [post]
 func (u User) Create(c *gin.Context) {
 	var req RegisterRequest
 	if err := c.ShouldBind(&req); err != nil {
