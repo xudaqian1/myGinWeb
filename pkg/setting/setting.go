@@ -10,14 +10,21 @@ import (
 type IConfig struct {
 	JwtSecret string
 	RunMode   string
-	Database     DatabaseConfig
+	Database  DatabaseConfig
 	Port      int
+	Redis     RedisConfig
 }
 type DatabaseConfig struct {
-	Type string
+	Type     string
 	Username string
 	Password string
 	DbName   string
+	Host     string
+	Port     int
+}
+
+type RedisConfig struct {
+	Password string
 	Host     string
 	Port     int
 }
@@ -68,5 +75,17 @@ func init() {
 	}
 	if key = os.Getenv("DATABASE_DB_NAME"); key != "" {
 		Config.Database.DbName = key
+	}
+	// redis
+	if key = os.Getenv("REDIS_HOST"); key != "" {
+		Config.Redis.Host = key
+	}
+	if key = os.Getenv("REDIS_PASSWORD"); key != "" {
+		Config.Redis.Host = key
+	}
+	if key = os.Getenv("REDIS_PORT"); key != "" {
+		if b, err := strconv.Atoi(key); err == nil {
+			Config.Redis.Port = b
+		}
 	}
 }

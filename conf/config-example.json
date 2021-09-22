@@ -9,5 +9,10 @@
     "DbName": "Hinux",
     "Port": 3306,
     "Host": "127.0.0.1"
+  },
+  "Redis":{
+    "Password": "",
+    "Host": "localhost",
+    "Port": 6379
   }
 }
